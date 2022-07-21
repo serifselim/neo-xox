@@ -25,6 +25,14 @@ li {
   width: 35px;
   height: 35px;
   border: 1px solid black;
+  text-align: center;
+  font-size: 25px;
+}
+
+li:hover {
+  border: 1px solid blue;
+  background-color: blue;
+  color: white;
 }
 
 ul {

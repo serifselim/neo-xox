@@ -18,14 +18,27 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log(squaresArray);
+    //console.log(squaresArray);
+
   }, [squaresArray]);
 
   const handleClick = (colIndex, rowIndex) => {
-    console.log('col şu = ' + colIndex + ' row şu = ' + rowIndex);
+    //console.log('col şu = ' + colIndex + ' row şu = ' + rowIndex);
     let newArr = [...squaresArray];
     newArr[colIndex][rowIndex] = 'x';
     setSquaresArray(newArr);
+
+    //the computer
+    let random = Math.floor(Math.random() * 20);
+    let random2 = Math.floor(Math.random() * 11);
+    // console.log(random);
+    // console.log(random2);
+
+    let cpuArr = [...squaresArray];
+    cpuArr[random][random2] = 'o';
+    setSquaresArray(cpuArr);
+
+   
   };
 
   return (
