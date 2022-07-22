@@ -11,8 +11,8 @@
 
 .content {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 48.8%;
+  top: 46%;
   transform: translate(-50%, -50%);
 }
 
@@ -20,10 +20,19 @@ body {
   font-family: sans-serif;
 }
 
+header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 25px 0;
+  color: coral;
+  border-bottom: 3px solid coral;
+}
+
 li {
   list-style: none;
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border: 1px solid black;
   text-align: center;
   font-size: 25px;

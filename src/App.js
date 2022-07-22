@@ -134,6 +134,9 @@ const App = () => {
   };
   return (
     <div className='container'>
+      <header>
+        <h1>NEO XOX</h1>
+      </header>
       <div className='content'>
         {
           squaresArray.map((col, colIndex) => {
