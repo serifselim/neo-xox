@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { rows, columns, squaresObject, emptyObject } from './constants';
+import Square from './Square';
 
 const App = () => {
-  const [squaresArray, setSquaresArray] = useState([]);
+  const [squaresArray, setSquaresArray] = useState([]); // Oyun tablosundaki arrayimizin state'i
 
-  useEffect(() => {
+  useEffect(() => { // Component render edildiğinde oyun tahtasının oluşturulması
     let parentArr = [];
     for (let i = 0; i < columns + 4; i++) {
       let childArr = [];
@@ -29,24 +30,26 @@ const App = () => {
     setSquaresArray(parentArr);
   }, []);
 
-  // useEffect(() => {
-  //   console.log(squaresArray);
-  // }, [squaresArray]);
-
-  const handleClick = (col, row) => {
-    console.log('col şu = ' + col + ' row şu = ' + row);
+  const handleClick = (col, row) => { // Kareye tıkladığımız zaman çalışacak method
     let newArr = [...squaresArray];
-
-    if (newArr[col][row].isActive) {
+    if (newArr[col][row].isActive) { // Eğer daha önce o karaye tıklanmamışsa
       newArr[col][row].value = 'X';
       newArr[col][row].isActive = false;
       checkWin(col, row, newArr, true);
       setSquaresArray(newArr);
+    } else {
+      return;
     }
 
     // the computer;
-    let colRandom = Math.floor(Math.random() * 20);
-    let rowRandom = Math.floor(Math.random() * 11);
+    // bilgisayarın random bir değer seçmesi
+    let colRandom, rowRandom;
+
+    do {
+      colRandom = Math.floor(Math.random() * 20);
+      rowRandom = Math.floor(Math.random() * 11);
+    } while (!squaresArray[colRandom][rowRandom].isActive);
+
     let cpuArr = [...squaresArray];
 
     if (cpuArr[colRandom][rowRandom].isActive) {
@@ -55,14 +58,14 @@ const App = () => {
       checkWin(colRandom, rowRandom, cpuArr, false);
       setSquaresArray(cpuArr);
     }
-
   };
 
+  // Spesifik değerlerin array üzerinden getirilmesi
   const getSquare = (col, row) => squaresArray[col][row].value;
   const myFinishedCheck = (col, row) => squaresArray[col][row].isMyFinished;
   const cpuFinishedCheck = (col, row) => squaresArray[col][row].isCpuFinished;
 
-  const resultQuery = (param1, param2, param3) => {
+  const resultQuery = (param1, param2, param3) => { // Sorgu parametrelerinin kontrolü
     if (
       (!myFinishedCheck(param1[0], param1[1]) && !myFinishedCheck(param2[0], param2[1]) && !myFinishedCheck(param3[0], param3[1]))
       &&
@@ -78,121 +81,57 @@ const App = () => {
     }
   };
 
-  const checkWin = (col, row, newArr, isMy) => {
-    const rowChecks = [
-      {
-        values: [[col, row], [col, row + 1], [col, row + 2]],
-        query: resultQuery([col, row], [col, row + 1], [col, row + 2])
-      },
-      {
-        values: [[col, row], [col, row - 1], [col, row + 1]],
-        query: resultQuery([col, row], [col, row - 1], [col, row + 1])
-      },
-      {
-        values: [[col, row], [col, row - 1], [col, row - 2]],
-        query: resultQuery([col, row], [col, row - 1], [col, row - 2])
-      }
-    ];
-
-    const colChecks = [
-      {
-        values: [[col, row], [col + 1, row], [col + 2, row]],
-        query: resultQuery([col, row], [col + 1, row], [col + 2, row])
-      },
-      {
-        values: [[col, row], [col - 1, row], [col + 1, row]],
-        query: resultQuery([col, row], [col - 1, row], [col + 1, row])
-      },
-      {
-        values: [[col, row], [col - 1, row], [col - 2, row]],
-        query: resultQuery([col, row], [col - 1, row], [col - 2, row])
-      }
-    ];
-
-    const rightDiagonalCheck = [
-      {
-        values: [[col, row], [col + 1, row - 1], [col + 2, row - 2]],
-        query: resultQuery([col, row], [col + 1, row - 1], [col + 2, row - 2])
-      },
-      {
-        values: [[col, row], [col - 1, row + 1], [col + 1, row - 1]],
-        query: resultQuery([col, row], [col - 1, row + 1], [col + 1, row - 1])
-      },
-      {
-        values: [[col, row], [col - 1, row + 1], [col - 2, row + 2]],
-        query: resultQuery([col, row], [col - 1, row + 1], [col - 2, row + 2])
-      },
-    ];
-
-    const leftDiagonalCheck = [
-      {
-        values: [[col, row], [col + 1, row + 1], [col + 2, row + 2]],
-        query: resultQuery([col, row], [col + 1, row + 1], [col + 2, row + 2])
-      },
-      {
-        values: [[col, row], [col - 1, row - 1], [col + 1, row + 1]],
-        query: resultQuery([col, row], [col - 1, row - 1], [col + 1, row + 1])
-      },
-      {
-        values: [[col, row], [col - 1, row - 1], [col - 2, row - 2]],
-        query: resultQuery([col, row], [col - 1, row - 1], [col - 2, row - 2])
-      },
-    ];
-
-    rowChecks.forEach(item => {
-      if (item.query) {
-        item.values.forEach(value => {
-          if (isMy) {
-            newArr[value[0]][value[1]].isMyFinished = true;
-          } else {
-            newArr[value[0]][value[1]].isCpuFinished = true;
-          }
-          return;
-        });
-      }
-    });
-
-    colChecks.forEach(item => {
-      if (item.query) {
-        item.values.forEach(value => {
-          if (isMy) {
-            newArr[value[0]][value[1]].isMyFinished = true;
-          } else {
-            newArr[value[0]][value[1]].isCpuFinished = true;
-          }
-          return;
-        });
-      }
-    });
-
-    rightDiagonalCheck.forEach(item => {
-      if (item.query) {
-        item.values.forEach(value => {
-          if (isMy) {
-            newArr[value[0]][value[1]].isMyFinished = true;
-          } else {
-            newArr[value[0]][value[1]].isCpuFinished = true;
-          }
-          return;
-        });
-      }
-    });
-
-    leftDiagonalCheck.forEach(item => {
-      if (item.query) {
-        item.values.forEach(value => {
-          if (isMy) {
-            newArr[value[0]][value[1]].isMyFinished = true;
-          } else {
-            newArr[value[0]][value[1]].isCpuFinished = true;
-          }
-          return;
-        });
-      }
-    });
+  const checkObject = (param1, param2, param3) => { // üç yönün ayrı ayrı kontrolü
+    return {
+      values: [[param1[0], param1[1]], [param2[0], param2[1]], [param3[0], param3[1]]],
+      query: resultQuery([param1[0], param1[1]], [param2[0], param2[1]], [param3[0], param3[1]])
+    };
   };
 
+  const checkWin = (col, row, newArr, isMy) => { // kazanan var mı methodu
 
+    const allChecksArr = [ // kontrol şemamızın listesi
+      // Horizontal
+      [
+        checkObject([col, row], [col, row + 1], [col, row + 2]),
+        checkObject([col, row], [col, row - 1], [col, row + 1]),
+        checkObject([col, row], [col, row - 1], [col, row - 2])
+      ],
+      // Vertical
+      [
+        checkObject([col, row], [col + 1, row], [col + 2, row]),
+        checkObject([col, row], [col - 1, row], [col + 1, row]),
+        checkObject([col, row], [col - 1, row], [col - 2, row])
+      ],
+      // RightDiagonalCheck
+      [
+        checkObject([col, row], [col + 1, row - 1], [col + 2, row - 2]),
+        checkObject([col, row], [col - 1, row + 1], [col + 1, row - 1]),
+        checkObject([col, row], [col - 1, row + 1], [col - 2, row + 2]),
+      ],
+      // leftDiagonalCheck
+      [
+        checkObject([col, row], [col + 1, row + 1], [col + 2, row + 2]),
+        checkObject([col, row], [col - 1, row - 1], [col + 1, row + 1]),
+        checkObject([col, row], [col - 1, row - 1], [col - 2, row - 2]),
+      ]
+    ];
+
+    allChecksArr.forEach(checkTypes => { // şemanın dönmesi ve sonucun bize gelmesi
+      checkTypes.forEach(item => {
+        if (item.query) {
+          item.values.forEach(value => {
+            if (isMy) {
+              newArr[value[0]][value[1]].isMyFinished = true;
+            } else {
+              newArr[value[0]][value[1]].isCpuFinished = true;
+            }
+            return;
+          });
+        }
+      });
+    });
+  };
   return (
     <div className='container'>
       <div className='content'>
@@ -202,14 +141,13 @@ const App = () => {
               <ul key={colIndex} value={colIndex}>
                 {
                   squaresArray[colIndex].map((row, rowIndex) => (
-                    <li
-                      className={`
-                      ${row.isMyFinished ? 'my-finished' : 'not-finished'} 
-                      ${row.isCpuFinished ? 'cpu-finished' : null} 
-                      ${!row.isVisible && 'display-none'}
-                      `}
-                      key={rowIndex}
-                      onClick={() => handleClick(colIndex, rowIndex)}>{row.value}</li>
+                    <Square
+                      key={rowIndex + colIndex}
+                      row={row}
+                      rowIndex={rowIndex}
+                      colIndex={colIndex}
+                      handleClick={handleClick}
+                    />
                   ))
                 }
               </ul>
@@ -221,5 +159,4 @@ const App = () => {
   );
 
 };
-
 export default App;

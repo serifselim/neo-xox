@@ -7,7 +7,6 @@ export const squaresObject = {
     isCpuFinished: false,
     isVisible: true,
 };
-
 export const emptyObject = {
     value: '',
     isActive: false,
