@@ -29,10 +29,24 @@ li {
   font-size: 25px;
 }
 
-li:hover {
+.not-finished:hover {
   border: 1px solid blue;
   background-color: blue;
   color: white;
+}
+
+.my-finished {
+  background-color: red;
+  color: white;
+}
+
+.cpu-finished {
+  background-color: blueviolet;
+  color: white;
+}
+
+.display-none {
+  display: none;
 }
 
 ul {
