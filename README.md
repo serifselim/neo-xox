@@ -9,7 +9,7 @@
 - [Mert Aytuğ Gök](https://github.com/mertaytuggok)
 - [Yavuz Selim Şerifoğlu](https://github.com/serifselim)
 
-## General info
+## Oyun Hakkında
 
 Klasik xox oyununa yeni bir pencere
 
