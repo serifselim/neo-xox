@@ -93,41 +93,43 @@ const App = () => {
     const allChecksArr = [ // kontrol şemamızın listesi
       // Horizontal
       [
-        checkObject([col, row], [col, row + 1], [col, row + 2]),
         checkObject([col, row], [col, row - 1], [col, row + 1]),
+        checkObject([col, row], [col, row + 1], [col, row + 2]),
         checkObject([col, row], [col, row - 1], [col, row - 2])
       ],
       // Vertical
       [
-        checkObject([col, row], [col + 1, row], [col + 2, row]),
         checkObject([col, row], [col - 1, row], [col + 1, row]),
+        checkObject([col, row], [col + 1, row], [col + 2, row]),
         checkObject([col, row], [col - 1, row], [col - 2, row])
       ],
       // RightDiagonalCheck
       [
-        checkObject([col, row], [col + 1, row - 1], [col + 2, row - 2]),
         checkObject([col, row], [col - 1, row + 1], [col + 1, row - 1]),
+        checkObject([col, row], [col + 1, row - 1], [col + 2, row - 2]),
         checkObject([col, row], [col - 1, row + 1], [col - 2, row + 2]),
       ],
       // leftDiagonalCheck
       [
-        checkObject([col, row], [col + 1, row + 1], [col + 2, row + 2]),
         checkObject([col, row], [col - 1, row - 1], [col + 1, row + 1]),
+        checkObject([col, row], [col + 1, row + 1], [col + 2, row + 2]),
         checkObject([col, row], [col - 1, row - 1], [col - 2, row - 2]),
       ]
     ];
 
+    let isAlreadyChecked = false;
+
     allChecksArr.forEach(checkTypes => { // şemanın dönmesi ve sonucun bize gelmesi
       checkTypes.forEach(item => {
-        if (item.query) {
+        if (item.query && !isAlreadyChecked) {
           item.values.forEach(value => {
             if (isMy) {
               newArr[value[0]][value[1]].isMyFinished = true;
             } else {
               newArr[value[0]][value[1]].isCpuFinished = true;
             }
-            return;
           });
+          isAlreadyChecked = true;
         }
       });
     });
